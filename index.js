@@ -11,7 +11,7 @@ app.use(morgan('dev'))
 app.use(bodyParser.json()); 
 // for parsing application/xwww-
 app.use(bodyParser.urlencoded({ extended: true })); 
-const mongoDB = "mongodb+srv://phamdai:anhdai123@cluster0.3eo0c6r.mongodb.net/milionaire?retryWrites=true&w=majority";
+const mongoDB = process.env.MONGODB_URL
 mongoose.connect(mongoDB);
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
