@@ -1,9 +1,9 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-
 var morgan = require('morgan')
 var app = express();
-
+const dotenv = require('dotenv');
+dotenv.config();
 const mongoose = require("mongoose");
 var cors = require('cors');
 app.use(cors());
