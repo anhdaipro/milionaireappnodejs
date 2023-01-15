@@ -5,7 +5,8 @@ const Question = require("../models/Question")
 const QuestionUser=require("../models/QuestionUser")
 const AnswerUser=require("../models/AnswerUser")
 const authcontroller=require('./auth')
-
+const NodeCache = require("node-cache");
+const myCache = new NodeCache({ stdTTL: 15 });
 const randomslice = (ar, size) => {
     let new_ar = [...ar];
     new_ar.splice(Math.floor(Math.random()*ar.length),1);
@@ -19,6 +20,10 @@ const addquestions= async (req,res)=>{
     
 }
 const addquestion=async(req,res)=>{
+    if (myCache.has("songs")) {
+        res.send(myCache.get("songs"));
+    } 
+    else {   
         const user=await User.User.findOne({username:"phamdai"})
         const questions=await Question.find()
         const easy=questions.filter(item=>item.level=='1').map(item=>item._id)
@@ -32,7 +37,7 @@ const addquestion=async(req,res)=>{
         const questionuser= await QuestionUser.create({user:user,question:easy_list[0]})
         const first_question=await Question.findById(easy_list[0],{id:"$_id",question:1,answer:1,choice:1})
         res.json({question:first_question,id:anwsers.id,questionuserid:questionuser.id})
-    
+    }
 }
 
 const supportquestion=async(req,res)=>{
